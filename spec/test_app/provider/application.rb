@@ -30,9 +30,9 @@ module TestApp
       @user = User['Bob']
       protect_resource_for(@user, ['profile']) do |auth|
         if auth.valid?
-          JSON.unparse('data' => 'Top secret')
+          MultiJson.dump('data' => 'Top secret')
         else
-          JSON.unparse('data' => 'No soup for you')
+          MultiJson.dump('data' => 'No soup for you')
         end
       end
     end

@@ -51,7 +51,7 @@ module OAuth2
           response[EXPIRES_IN] = expiry
         end
         
-        JSON.unparse(response)
+        MultiJson.dump(response)
       end
       
       def response_headers
@@ -77,7 +77,7 @@ module OAuth2
       def jsonize(*ivars)
         hash = {}
         ivars.each { |key| hash[key] = instance_variable_get("@#{key}") }
-        JSON.unparse(hash)
+        MultiJson.dump(hash)
       end
       
       def validate!

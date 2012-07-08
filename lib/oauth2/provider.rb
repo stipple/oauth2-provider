@@ -1,7 +1,7 @@
 require 'cgi'
 require 'digest/sha1'
 require 'bcrypt'
-require 'json'
+require 'multi_json'
 require 'active_record'
 require 'rack'
 

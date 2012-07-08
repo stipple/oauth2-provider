@@ -292,7 +292,7 @@ this example will be a Facebook access token.
     facebook = URI.parse('https://graph.facebook.com/me?access_token=' + assertion)
     response = Net::HTTP.get_response(facebook)
     
-    user_data = JSON.parse(response.body)
+    user_data = MultiJson.load(response.body)
     account   = User.from_facebook_data(user_data)
     
     account.grant_access!(client)
@@ -322,9 +322,9 @@ simple, for example a call to get a user's notes:
     status  token.response_status
     
     if token.valid?
-      JSON.unparse('notes' => user.notes)
+      MultiJson.dump('notes' => user.notes)
     else
-      JSON.unparse('error' => 'No notes for you!')
+      MultiJson.dump('error' => 'No notes for you!')
     end
   end
 
@@ -342,9 +342,9 @@ about a user by supplying their access token. This can be done by passing
   get '/me' do
     token = OAuth2::Provider.access_token(nil, [], env)
     if token.valid?
-      JSON.unparse('username' => token.owner.username)
+      MultiJson.dump('username' => token.owner.username)
     else
-      JSON.unparse('error' => 'Keep out!')
+      MultiJson.dump('error' => 'Keep out!')
     end
   end
 

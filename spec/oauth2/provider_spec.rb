@@ -472,20 +472,20 @@ describe OAuth2::Provider do
       
       it "allows access when the key is passed" do
         response = request('/user_profile', 'oauth_token' => 'magic-key')
-        JSON.parse(response.body)['data'].should == 'Top secret'
+        MultiJson.load(response.body)['data'].should == 'Top secret'
         response.code.to_i.should == 200
       end
       
       it "blocks access when the wrong key is passed" do
         response = request('/user_profile', 'oauth_token' => 'is-the-password-books')
-        JSON.parse(response.body)['data'].should == 'No soup for you'
+        MultiJson.load(response.body)['data'].should == 'No soup for you'
         response.code.to_i.should == 401
         response['WWW-Authenticate'].should == "OAuth realm='Demo App', error='invalid_token'"
       end
       
       it "blocks access when the no key is passed" do
         response = request('/user_profile')
-        JSON.parse(response.body)['data'].should == 'No soup for you'
+        MultiJson.load(response.body)['data'].should == 'No soup for you'
         response.code.to_i.should == 401
         response['WWW-Authenticate'].should == "OAuth realm='Demo App'"
       end
@@ -499,7 +499,7 @@ describe OAuth2::Provider do
         
         it "blocks access when not using HTTPS" do
           response = request('/user_profile', 'oauth_token' => 'magic-key')
-          JSON.parse(response.body)['data'].should == 'No soup for you'
+          MultiJson.load(response.body)['data'].should == 'No soup for you'
           response.code.to_i.should == 401
           response['WWW-Authenticate'].should == "OAuth realm='Demo App', error='invalid_request'"
         end

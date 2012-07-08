@@ -107,7 +107,7 @@ module OAuth2
       def response_body
         return nil if @client and valid?
         return nil if redirect?
-        JSON.unparse(
+        MultiJson.dump(
           ERROR             => @error,
           ERROR_DESCRIPTION => @error_description)
       end

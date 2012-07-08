@@ -22,7 +22,7 @@ module RequestHelpers
   
   def validate_json_response(response, status, body)
     response.code.to_i.should == status
-    JSON.parse(response.body).should == body
+    MultiJson.load(response.body).should == body
     response['Content-Type'].should == 'application/json'
     response['Cache-Control'].should == 'no-store'
   end

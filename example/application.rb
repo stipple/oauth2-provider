@@ -2,7 +2,7 @@ dir = File.expand_path('..', __FILE__)
 require dir + '/environment'
 
 require 'sinatra'
-require 'json'
+require 'multi_json'
 
 set :static, true
 set :root, dir
@@ -12,7 +12,7 @@ PERMISSIONS = {
   'read_notes' => 'Read all your notes'
 }
 
-ERROR_RESPONSE = JSON.unparse('error' => 'No soup for you!')
+ERROR_RESPONSE = MultiJson.dump('error' => 'No soup for you!')
 
 get('/') { erb(:home) }
 
@@ -105,7 +105,7 @@ get '/me' do
   
   if authorization.valid?
     user = authorization.owner
-    JSON.unparse('username' => user.username)
+    MultiJson.dump('username' => user.username)
   else
     ERROR_RESPONSE
   end
@@ -116,14 +116,14 @@ get '/users/:username/notes' do
     notes = user.notes.map do |n|
       {:note_id => n.id, :url => "#{host}/users/#{user.username}/notes/#{n.id}"}
     end
-    JSON.unparse(:notes => notes)
+    MultiJson.dump(:notes => notes)
   end
 end
 
 get '/users/:username/notes/:note_id' do
   verify_access :read_notes do |user|
     note = user.notes.find_by_id(params[:note_id])
-    note ? note.to_json : JSON.unparse(:error => 'No such note')
+    note ? note.to_json : MultiJson.dump(:error => 'No such note')
   end
 end
 
