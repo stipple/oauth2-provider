@@ -1,6 +1,7 @@
 *.sqlite3
 *.db
 Gemfile.lock
+gemfiles/*.lock
 pkg
 rdoc
 .idea/*

@@ -10,6 +10,10 @@ require 'oauth2/provider'
 
 ActiveRecord::Base.establish_connection(:adapter  => 'sqlite3', :database => 'test.sqlite3')
 
+require 'logger'
+ActiveRecord::Base.logger = Logger.new(STDERR)
+ActiveRecord::Base.logger.level = Logger::INFO
+
 OAuth2::Model::Schema.up
 
 ActiveRecord::Schema.define do |version|
@@ -39,6 +43,8 @@ RSpec.configure do |config|
 
   config.before do
     OAuth2::Provider.enforce_ssl = false
+    time = Time.now
+    Time.stub(:now).and_return time
   end
   
   config.after do
@@ -47,6 +53,14 @@ RSpec.configure do |config|
       TestApp::User
       
     ].each { |k| k.delete_all }
+  end
+end
+
+def create_authorization(params)
+  OAuth2::Model::Authorization.create do |authorization|
+    params.each do |key, value|
+      authorization.__send__ "#{key}=", value
+    end
   end
 end
 

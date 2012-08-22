@@ -1,4 +1,3 @@
-require 'cgi'
 require 'digest/sha1'
 require 'bcrypt'
 require 'multi_json'
